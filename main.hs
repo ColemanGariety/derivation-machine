@@ -1,19 +1,27 @@
 import Debug.Trace
 
-data Expr = Phrase String | Not Expr | And Expr Expr | Or Expr Expr
+data Expr = Nil | Phrase String | Not Expr | And Expr Expr | Or Expr Expr
           deriving (Show, Eq)
 
+dne :: Expr -> Expr
 dne (Not (Not p)) = p
-dni p = (Not (Not p))
+dne _ = Nil
 
+dni :: Expr -> Expr
+dni p = Not (Not p)
+
+rules :: [Expr -> Expr]
 rules = [dne, dni]
 
-prove props = go props rules []
-  where go (p:ps) (r:rs) next
-          | res == (last props) = "proven"
-          | null rs = go next rules next
-          | null ps = go next rs []
-          | otherwise = go ps rs (next ++ [res])
-          where res = r p
+prove :: [Expr] -> Expr -> String
+prove props c = go props rules []
+  where go [] _ next = go next rules []
+        go (_:ps) [] next = go ps rules next
+        go px@(p:_) (r:rs) next
+          | (traceShow p False) = "foo"
+          | res == c = "proven"
+          | otherwise = go px rs ([res] ++ next)
+            where res = r p
 
-main = print $ prove [(Not (Not (Not (Not (Phrase "a"))))), (Phrase "a")]
+main :: IO ()
+main = print $ prove [(Not (Not (Not (Not (Phrase "a")))))] (Phrase "a")
