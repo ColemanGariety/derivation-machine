@@ -1,19 +1,19 @@
-dne ("not", ("not", c)) = (c)
-dni p = ("not", ("not", p))
-ael (a, "and", c) = (a)
-aer (a, "and", c) = (c)
-ai p q = (p, "and", q)
--- mpp ("if", a, "then", b) c = if a == c then b else ""
--- mtt ("if", a, "then", b) ("not", c) = if b == c then ("not", a) else ""
+import Debug.Trace
 
-rules = [dne, dni, ael, aer, ai, mpp, mtt]
+data Expr = Phrase String | Not Expr | And Expr Expr | Or Expr Expr
+          deriving (Show, Eq)
 
-prove props c = go props rules []
+dne (Not (Not p)) = p
+dni p = (Not (Not p))
+
+rules = [dne, dni]
+
+prove props = go props rules []
   where go (p:ps) (r:rs) next
-          | res == c = "proven"
-          | null rs = go ps rules next
-          | null ps = go next rules []
-          | otherwise = go ps rs (next : res)
+          | res == (last props) = "proven"
+          | null rs = go next rules next
+          | null ps = go next rs []
+          | otherwise = go ps rs (next ++ [res])
           where res = r p
 
-main = print $ prove [("not", ("not", ("a")))] ("a")
+main = print $ prove [(Not (Not (Not (Not (Phrase "a"))))), (Phrase "a")]
