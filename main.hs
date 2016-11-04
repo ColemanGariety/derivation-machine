@@ -22,8 +22,16 @@ dne _ = Nothing
 dni :: Rule
 dni = Just . Not . Not
 
+ael :: Rule
+ael (And p q) = Just p
+ael _ = Nothing
+
+aer :: Rule
+aer (And p q) = Just q
+aer _ = Nothing
+
 rulePairs :: [(Rule, String)]
-rulePairs = [(dne, "DNE"), (dni, "DNI")]
+rulePairs = [(dne, "DNE"), (dni, "DNI"), (ael, "AND ELIM"), (aer, "AND ELIM")]
 
 -- catMaybeFst :: [(Maybe a, t)] -> [(Maybe a, t)]
 catMaybeFst ls = [(x, y) | (Just x, y) <- ls]
@@ -39,4 +47,7 @@ resolve = concat . unfoldr (Just . join (,) . apply)
 doesFollow ps c = elem c (map fst (resolve (map (\p -> (p, "S") ) ps)))
 
 main :: IO ()
-main = print $ doesFollow [(Phrase "a"), (Not (Not (Phrase "c")))] (Not (Not (Phrase "c")))
+main = print $ doesFollow
+       [
+         (Not (Not (And (Phrase "a") (Phrase "b"))))
+       ] (Phrase "a")
