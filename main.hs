@@ -11,21 +11,32 @@ data Expr = Nil | Phrase String | Not Expr | And Expr Expr | Or Expr Expr
 
 type Rule = Expr -> Maybe Expr
 
-dne :: Expr -> Maybe Expr
+type Line = (Maybe Expr, String)
+
+fst' (x,_,_) = x
+
+dne :: Rule
 dne (Not (Not p)) = Just p
 dne _ = Nothing
 
-dni :: Expr -> Maybe Expr
+dni :: Rule
 dni = Just . Not . Not
 
-rules :: [( Expr -> Maybe Expr, String)]
-rules = [(dne, "DNE"), (dni, "DNI")]
+rulePairs :: [(Rule, String)]
+rulePairs = [(dne, "DNE"), (dni, "DNI")]
 
-apply :: [Expr] -> [Expr]
-apply props = catMaybes [r p | p <- props, r <- (map fst rules)]
+-- catMaybeFst :: [(Maybe a, t)] -> [(Maybe a, t)]
+catMaybeFst ls = [(x, y) | (Just x, y) <- ls]
 
-resolve :: [Expr] -> [Expr]
+-- apply :: [Expr] -> [Line]
+apply props = catMaybeFst [(r p, n) | pp <- props, rp <- rulePairs,
+                           let (r, n) = rp,
+                           let (p, o) = pp]
+
+-- resolve :: [Expr] -> [Line]
 resolve = concat . unfoldr (Just . join (,) . apply)
 
+doesFollow ps c = elem c (map fst (resolve (map (\p -> (p, "S") ) ps)))
+
 main :: IO ()
-main = print $ take 10 (resolve [Not (Not (Not (Not (Not (Not (Phrase "a"))))))])
+main = print $ doesFollow [(Phrase "a"), (Not (Not (Phrase "c")))] (Not (Not (Phrase "c")))
