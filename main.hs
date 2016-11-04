@@ -1,30 +1,31 @@
 -- import qualified Data.Map as Map
-import Debug.Trace
+
+import Control.Monad
+import Data.List
+import Data.Maybe
+
+-- import Debug.Trace
 
 data Expr = Nil | Phrase String | Not Expr | And Expr Expr | Or Expr Expr
           deriving (Show, Eq)
 
-dne :: Expr -> Expr
-dne (Not (Not p)) = p
-dne _ = Nil
+type Rule = Expr -> Maybe Expr
 
-dni :: Expr -> Expr
-dni p = Not (Not p)
+dne :: Expr -> Maybe Expr
+dne (Not (Not p)) = Just p
+dne _ = Nothing
 
-rules :: [Expr -> Expr]
-rules = [dne, dni]
+dni :: Expr -> Maybe Expr
+dni = Just . Not . Not
 
-prove :: [Expr] -> Expr -> String
-prove props c = go props rules []
-  where go [] _ [] = error "no props"
-        go [] _ next = go next rules []
-        go (p:ps) [] next = go ps rules (res:next)
-          where res = (head rules) p
-        go px (r:rs) next
-          | (traceShow (head px) False) = "foo"
-          | res == c = "proven"
-          | otherwise = go px rs (res:next)
-          where res = r (head px)
+rules :: [( Expr -> Maybe Expr, String)]
+rules = [(dne, "DNE"), (dni, "DNI")]
+
+apply :: [Expr] -> [Expr]
+apply props = catMaybes [r p | p <- props, r <- (map fst rules)]
+
+resolve :: [Expr] -> [Expr]
+resolve = concat . unfoldr (Just . join (,) . apply)
 
 main :: IO ()
-main = print $ prove [(Not (Not (Not (Not (Not (Not (Phrase "a")))))))] (Phrase "a")
+main = print $ take 10 (resolve [Not (Not (Not (Not (Not (Not (Phrase "a"))))))])
