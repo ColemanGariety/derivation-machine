@@ -8,17 +8,17 @@ The brute-force method is simply to try to apply every truth functional rule in 
 
 Will it be slow?
 
-What we want is to give the program this sexp:
+What we want is to give the program these arguments:
 
-((if a b)
- (if b c)
- a
- c)
+[
+  (If (NM A) (NM B))
+  (NM A)
+] (NM B)
 
 and get a list:
 
-(((if a b) (S))
- ((if b c) (S))
- (a        (S))
- (b        (1 3 MPP))
- (c        (2 4 MPP)))
+[
+  (1, (If (NM A) (NM B)), (S 1))
+  (2, (NM A), (S 2))
+  (3, (NM B), (MPP 1 2))
+]
