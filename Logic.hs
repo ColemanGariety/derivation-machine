@@ -61,8 +61,8 @@ dsr :: DoubleRule
 dsr (Or p q) (Not r) = if q == r then Just p else Nothing
 dsr _ _ = Nothing
 
-rules :: [Rule]
-rules = [dne, dni, ael, aer, iffel, iffer]
+rulePairs :: [(Rule, String)]
+rulePairs = [(dne, "DNE"), (dni, "DNI"), (ael, "AE"), (aer, "AE"), (iffel, "IFFE"), (iffer, "IFFE")]
 
-doubleRules :: [DoubleRule]
-doubleRules = [mpp, ai, mtt]
+doubleRulePairs :: [(DoubleRule, String)]
+doubleRulePairs = [(mpp, "MPP"), (ai, "AI"), (mtt, "MTT")]

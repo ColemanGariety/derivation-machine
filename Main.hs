@@ -5,36 +5,41 @@ import Data.Maybe
 import Logic
 import Util
 
-applySingle :: [Expr] -> [Expr]
-applySingle props = catMaybes [r p | p <- props, r <- rules]
+applySingle :: [(Expr, t)] -> [Line]
+applySingle props = catMaybeFst [(r p, (n, p)) | pp <- props, rp <- rulePairs,
+                                let (r, n) = rp,
+                                let (p, o) = pp]
 
-applyDouble :: [Expr] -> [Expr]
-applyDouble props = catMaybes [r p q | p <- props, q <- props, r <- doubleRules]
+applyDouble :: [(Expr, t)] -> [Line]
+applyDouble props = catMaybeFst [(r p q, (n, p)) | pp <- props, qp <- props, rp <- doubleRulePairs,
+                               let (r, n) = rp,
+                               let (p, o) = pp,
+                               let (q, s) = qp]
 
-apply :: [Expr] -> [Expr]
+apply :: [(Expr, (String, Expr))] -> [Line]
 apply props = nub (props ++ applySingle props ++ applyDouble props)
 
-resolve :: [Expr] -> [[Expr]]
+resolve :: [Line] -> [[Line]]
 resolve = unfoldr (Just . join (,) . apply)
 
 isValid :: [Expr] -> Expr -> Bool
-isValid ps c = elem c . concat $ resolve ps
+isValid ps c = elem c . map fst . concat . resolve . addSups $ ps
 
--- addSups = map (\p -> (p, ("S", p)))
+addSups = map (\p -> (p, ("S", p)))
 
--- prove ps conc = go conc []
---   where go seed res = if elem (prev line) ps
---                       then (prettify ps) ++ ((pretty line) : res)
---                       else go (prev line) ((pretty line) : res)
---           where line = findLine seed
---                 findLine p = val . find (\b -> (prem b) == p) . concat $ rose
---                 findConclusion b = all (not . (\a -> (prem a) == conc)) b
---                 rose = takeWhileInclusive findConclusion (resolve (addSups ps))
---                 prettify = map (\p -> (p, "S"))
---                 pretty (a, (b, c)) = (a, b)
+prove ps conc = go conc []
+  where go seed res = if elem (prev line) ps
+                      then (prettify ps) ++ ((pretty line) : res)
+                      else go (prev line) ((pretty line) : res)
+          where line = findLine seed
+                findLine p = val . find (\b -> (prem b) == p) . concat $ rose
+                findConclusion b = all (not . (\a -> (prem a) == conc)) b
+                rose = takeWhileInclusive findConclusion (resolve (addSups ps))
+                prettify = map (\p -> (p, "S"))
+                pretty (a, (b, c)) = (a, b)
 
 main :: IO ()
-main = print $ isValid
+main = mapM_ print $ prove
 
        [ (Not (Not (If A B))),
          (And (Not (Not (Not B))) (Not C)) 
