@@ -61,8 +61,12 @@ dsr :: DoubleRule
 dsr (Or p q) (Not r) = if q == r then Just p else Nothing
 dsr _ _ = Nothing
 
+-- OR introduction
+ori :: DoubleRule
+ori p q = Just (Or p q)
+
 rulePairs :: [(Rule, String)]
 rulePairs = [(dne, "DNE"), (dni, "DNI"), (ael, "AE"), (aer, "AE"), (iffel, "IFFE"), (iffer, "IFFE")]
 
 doubleRulePairs :: [(DoubleRule, String)]
-doubleRulePairs = [(mpp, "MPP"), (ai, "AI"), (mtt, "MTT")]
+doubleRulePairs = [(mpp, "MPP"), (ai, "AI"), (mtt, "MTT"), (ori, "ORI")]

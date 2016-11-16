@@ -27,17 +27,15 @@ isValid ps c = elem c . map fst . concat . resolve . addSups $ ps
 
 addSups = map (\p -> (p, ("S", [p])))
 
-prove ps conc = go [conc] []
-  where go seeds res
-          | length (intersect seeds ps) == length seeds = nub (map pretty ((addSups ps) ++ res))
-          | otherwise = go (concatMap prev lines) (lines ++ res)
+prove ps conc = nub . map noPrevs $ go [conc] []
+  where noPrevs (a, (b, c)) = (a, b)
+        go seeds res = if length (intersect seeds ps) == length seeds
+                       then (addSups ps) ++ res
+                       else go (concatMap prev lines) (lines ++ res)
           where lines = map findLine seeds
-                pretty (a, (b, c)) = (a, b)
                 findLine p = val . find (\b -> (prem b) == p) . concat $ rose
-                  where 
-                    rose = takeWhileInclusive findConclusion (resolve (addSups ps))
-                      where
-                        findConclusion b = all (not . (\a -> (prem a) == conc)) b
+                  where rose = takeWhileInclusive findConclusion (resolve (addSups ps))
+                          where findConclusion b = all (not . (\a -> (prem a) == conc)) b
 
 main :: IO ()
 main = mapM_ print $ prove
