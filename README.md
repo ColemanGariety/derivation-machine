@@ -6,18 +6,18 @@ What we want is to give the program these arguments:
 
 ```
 [
-  (If (NM A) (NM B))
-  (NM A)
-] (NM B)
+  (If A B)
+  A
+] B
 ```
 
 and get a list:
 
 ```
 [
-  (1, (If (NM A) (NM B)), (S 1))
-  (2, (NM A), (S 2))
-  (3, (NM B), (MPP 1 2))
+  (1, (If A B), (S 1))
+  (2, A, (S 2))
+  (3, B, (MPP 1 2))
 ]
 ```
 
