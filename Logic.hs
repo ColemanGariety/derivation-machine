@@ -66,7 +66,7 @@ ori :: DoubleRule
 ori p q = Just (Or p q)
 
 rulePairs :: [(Rule, String)]
-rulePairs = [(dne, "DNE"), (dni, "DNI"), (ael, "AE"), (aer, "AE"), (iffel, "IFFE"), (iffer, "IFFE")]
+rulePairs = [(dne, "DNE"), (dni, "DNI"), (ael, "∧E"), (aer, "∧E"), (iffel, "↔E"), (iffer, "↔E")]
 
 doubleRulePairs :: [(DoubleRule, String)]
-doubleRulePairs = [(mpp, "MPP"), (ai, "AI"), (mtt, "MTT"), (ori, "ORI")]
+doubleRulePairs = [(mpp, "MPP"), (ai, "∧I"), (mtt, "MTT"), (ori, "∨I")]
