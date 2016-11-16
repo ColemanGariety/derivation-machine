@@ -6,7 +6,9 @@ Question: when proving that a conclusion follows from some premises, how do we k
 
 The brute-force method is simply to try to apply every truth functional rule in every combination to our premises ad infinitum until we reach our conclusion.
 
-Will it be slow?
+~~Will it be slow?~~
+
+It's fast as hell!
 
 What we want is to give the program these arguments:
 
