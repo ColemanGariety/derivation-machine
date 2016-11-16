@@ -14,7 +14,6 @@ prem (a, (b, c)) = a
 name :: (t, (t1, t2)) -> t1
 name (a, (b, c)) = b
 
-prev :: (t, (t1, t2)) -> t2
 prev (a, (b, c)) = c
 
 val (Just a) = a

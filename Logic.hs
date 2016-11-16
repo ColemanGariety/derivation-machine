@@ -6,7 +6,7 @@ data Expr = Nil | NM String | Not Expr | And Expr Expr | Or Expr Expr | If Expr 
 type Rule = Expr -> Maybe Expr
 type DoubleRule = Expr -> Expr -> Maybe Expr
 
-type Line = (Expr, (String, Expr))
+type Line = (Expr, (String, [Expr]))
 
 -- Double Negation Elimination
 dne :: Rule
