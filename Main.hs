@@ -1,9 +1,11 @@
-import Debug.Trace
 import Control.Monad
 import Data.List
 import Data.Maybe
 import Logic
 import Util
+import Prelude hiding (putStr)
+import Data.ByteString.Char8 (putStr)
+import Data.ByteString.UTF8 (fromString)
 
 applySingle :: [(Expr, t)] -> [Line]
 applySingle props = catMaybeFst [(r p, (n, [p])) | pp <- props, rp <- rulePairs,
@@ -17,16 +19,18 @@ applyDouble props = catMaybeFst [(r p q, (n, [p,q])) | pp <- props, qp <- props,
                                let (q, s) = qp]
 
 apply :: [Line] -> [Line]
-apply props = nub (props ++ applySingle props ++ applyDouble props)
+apply props = props ++ applySingle props ++ applyDouble props
 
 resolve :: [Line] -> [[Line]]
 resolve = unfoldr (Just . join (,) . apply)
 
+addSups :: [t] -> [(t, ([Char], [t]))]
+addSups = map (\p -> (p, ("S", [p])))
+
 isValid :: [Expr] -> Expr -> Bool
 isValid ps c = elem c . map fst . concat . resolve . addSups $ ps
 
-addSups = map (\p -> (p, ("S", [p])))
-
+prove :: [Expr] -> Expr -> [(Expr, [Char])]
 prove ps conc = nub . map noPrevs $ go [conc] []
   where noPrevs (a, (b, c)) = (a, b)
         go seeds res = if length (intersect seeds ps) == length seeds
