@@ -25,6 +25,7 @@ isValid :: [Expr] -> Expr -> Bool
 isValid ps c = elem c . map fst . concat . resolve . addSups $ ps
 
 -- prove :: [Expr] -> Expr -> [(Expr, [Char])]
+prove :: [Expr] -> Expr -> [(Expr, (String, [Expr]))]
 prove ps conc = nub $ go [conc] []
   where go seeds res = if length (intersect seeds ps) == length seeds
                        then (addSups ps) ++ res
@@ -37,6 +38,7 @@ prove ps conc = nub $ go [conc] []
 main :: IO ()
 main = prettyProof . addNumbers $ prove
 
-       [ (If A B),
-         (Not B) 
-       ] (Not A)
+       [ (If R (Not P)),
+         (Or Q P),
+         (Or R (Not (Or Q P)))
+       ] (Not P)

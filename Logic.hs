@@ -69,4 +69,4 @@ rulePairs :: [(Rule, String)]
 rulePairs = [(dne, "DNE"), (dni, "DNI"), (ael, "∧E"), (aer, "∧E"), (iffel, "↔E"), (iffer, "↔E")]
 
 doubleRulePairs :: [(DoubleRule, String)]
-doubleRulePairs = [(mpp, "MPP"), (ai, "∧I"), (mtt, "MTT"), (ori, "∨I")]
+doubleRulePairs = [(mpp, "MPP"), (ai, "∧I"), (mtt, "MTT"), (dsl, "DS"), (dsr, "DS"), (ori, "∨I")]

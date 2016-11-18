@@ -29,4 +29,4 @@ addSups = map (\p -> (p, ("S", [p])))
 addNumbers proof = zip [1..] (map (\(a,(b,c)) -> (a,(b, map (\x -> val (findIndex (\y -> y == x) numbers) + 1) c))) proof)
   where numbers = map fst proof
 
-prettyProof xs = printBox $ hsep 2 left (map (vcat left . map text) (transpose [[show a, show b, intercalate "," (map show d) ++ " " ++ c] | (a,(b,(c,d))) <- xs]))
+prettyProof xs = printBox $ hsep 2 left (map (vcat left . map text) (transpose [[show a, show b, (if c /= "S" then (intercalate "," (map show d)) ++ " " else "") ++ c] | (a,(b,(c,d))) <- xs]))
