@@ -4,7 +4,7 @@ I wrote this library to do my Philosophy 201 (Introductory Logic) homework for m
 
 For a good description of propositional logic, see this page: https://en.wikipedia.org/wiki/Propositional_calculus
 
-What we want is to give the program a book problem, and for the derivation machine to prove that it is true. The program lazily builds an infinite tree of logical sentences which "follow" from the given premises. Once it generates something that remembles the conclusion it walks backwards to the root, making not of each step it took.
+What we want is to give the program a book problem, and for the derivation machine to prove that it is true. The program lazily builds an infinite tree of logical sentences which "follow" from the given premises. Once it generates something that remembles the conclusion it walks backwards to the root and prints the result.
 
 ---
 
