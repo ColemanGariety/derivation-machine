@@ -3,9 +3,6 @@ import Data.List
 import Data.Maybe
 import Logic
 import Util
-import Prelude hiding (putStr)
-import Data.ByteString.Char8 (putStr)
-import Data.ByteString.UTF8 (fromString)
 
 applySingle :: [(Expr, t)] -> [Line]
 applySingle props = catMaybeFst [(r p, (n, [p])) | pp <- props, rp <- rulePairs,
@@ -24,16 +21,12 @@ apply props = props ++ applySingle props ++ applyDouble props
 resolve :: [Line] -> [[Line]]
 resolve = unfoldr (Just . join (,) . apply)
 
-addSups :: [t] -> [(t, ([Char], [t]))]
-addSups = map (\p -> (p, ("S", [p])))
-
 isValid :: [Expr] -> Expr -> Bool
 isValid ps c = elem c . map fst . concat . resolve . addSups $ ps
 
-prove :: [Expr] -> Expr -> [(Expr, [Char])]
-prove ps conc = nub . map noPrevs $ go [conc] []
-  where noPrevs (a, (b, c)) = (a, b)
-        go seeds res = if length (intersect seeds ps) == length seeds
+-- prove :: [Expr] -> Expr -> [(Expr, [Char])]
+prove ps conc = nub $ go [conc] []
+  where go seeds res = if length (intersect seeds ps) == length seeds
                        then (addSups ps) ++ res
                        else go (concatMap prev lines) (lines ++ res)
           where lines = map findLine seeds
@@ -42,8 +35,8 @@ prove ps conc = nub . map noPrevs $ go [conc] []
                           where findConclusion b = all (not . (\a -> (prem a) == conc)) b
 
 main :: IO ()
-main = mapM_ print $ prove
+main = prettyProof . addNumbers $ prove
 
-       [ (Not (Not (If A B))),
-         (And (Not (Not (Not B))) (Not C)) 
+       [ (If A B),
+         (Not B) 
        ] (Not A)
