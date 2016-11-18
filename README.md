@@ -1,6 +1,6 @@
 # :computer: Propositional Derivation Machine
 
-I wrote this library to do my Logic 201 homework for me.
+I wrote this library to do my Philosophy 201 (Introductory Logic) homework for me.
 
 For a good description of propositional logic, see this page: https://en.wikipedia.org/wiki/Propositional_calculus
 
