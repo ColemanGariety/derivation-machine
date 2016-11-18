@@ -1,4 +1,4 @@
-# Propositional Derivation Machine
+# :computer: Propositional Derivation Machine
 
 I wrote this library to do my Logic 201 homework for me.
 
