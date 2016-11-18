@@ -11,23 +11,21 @@ What we want is to give the program a book problem, and for the derivation machi
 A simple book problem in Haskell syntax (a list of premises and a conclusion):
 
 ```
-[
-  (If A B)
-  Not B
-] Not A
+[ (If A B),
+  (Not B) 
+] (Not A)
 ```
 
 This conclusion follows from the premises by the simple but unintuaitive rule called "modus tollendo tollens." Haskell gives us the answer:
 
 ```
-[
-  (1, (If A B), (S 1))
-  (2, A, (S 2))
-  (3, B, (MPP 1 2))
-]
+1  "If A B"  S  
+2  "Not B"   S  
+3  "Not A"   1,2 MTT
+(0.03 secs, 149,584 bytes)
 ```
 
-And now we have no more homework for first term!
+Although this is an elementary example, the derivation machine can do all propositional derivations that involve the *simple rules*. And now we have no more homework for first term!
 
 ---
 
