@@ -1,11 +1,11 @@
 import Control.Monad
 import Data.List
-import Data.Maybe
+
 import Logic
 import Util
 
 applySingle :: [(Expr, t)] -> [Line]
-applySingle props = catMaybeFst [(r p, (n, [p])) | pp <- props, rp <- rulePairs,
+applySingle props = catMaybeFst [((r p), (n, [p])) | pp <- props, rp <- rulePairs,
                                 let (r, n) = rp,
                                 let (p, o) = pp]
 
@@ -41,4 +41,4 @@ main = prettyProof . addNumbers $ prove
        [ (If R (Not P)),
          (Or Q P),
          (Or R (Not (Or Q P)))
-       ] (Not P)
+       ] (Q)
