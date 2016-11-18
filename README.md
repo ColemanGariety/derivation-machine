@@ -1,17 +1,23 @@
-# derivation machine
+# Propositional Derivation Machine
 
-This is a WIP truth-functional logic library written in Haskell as a learning exercise.
+I wrote this library to do my Logic 201 homework for me.
 
-What we want is to give the program these arguments:
+For a good description of propositional logic, see this page: https://en.wikipedia.org/wiki/Propositional_calculus
+
+What we want is to give the program a book problem, and for the derivation machine to prove that it is true. The program lazily builds an infinite tree of logical sentences which "follow" from the given premises. Once it generates something that remembles the conclusion it walks backwards to the root, making not of each step it took.
+
+---
+
+A simple book problem in Haskell syntax (a list of premises and a conclusion):
 
 ```
 [
   (If A B)
-  A
-] B
+  Not B
+] Not A
 ```
 
-and get a list:
+This conclusion follows from the premises by the simple but unintuaitive rule called "modus tollendo tollens." Haskell gives us the answer:
 
 ```
 [
@@ -21,7 +27,13 @@ and get a list:
 ]
 ```
 
-It works through a brute force approach wherein all the rules are applied to all the props recursively until a solution is found. Then the tree is traversed to the beginning.
+And now we have no more homework for first term!
+
+---
+
+Disclaimer: do your homework.
+
+---
 
 ~~Will it be slow?~~
 
