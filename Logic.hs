@@ -61,7 +61,7 @@ dsr :: DoubleRule
 dsr (Or p q) (Not r) = if q == r then Just p else Nothing
 dsr _ _ = Nothing
 
--- OR introduction -- this rule is broken
+-- OR introduction
 ori :: DoubleRule
 ori p q = Just (Or p q)
 
